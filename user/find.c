@@ -88,11 +88,6 @@ void find(char* path, char* filename)
         {
             if (de.inum == 0 || strcmp(de.name, ".") == 0 || strcmp(de.name, "..") == 0)
                 continue;
-            if (stat(buf, &st) < 0)
-            {
-                printf("find: cannot stat %s\n", buf);
-                continue;
-            }
             char* pt = concat_path(path, de.name);
             find(pt, filename);
             free(pt);
