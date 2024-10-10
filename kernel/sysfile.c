@@ -4,6 +4,8 @@
 // user code, and calls into file.c and fs.c.
 //
 
+#include <math.h>
+
 #include "types.h"
 #include "riscv.h"
 #include "defs.h"
@@ -15,6 +17,7 @@
 #include "sleeplock.h"
 #include "file.h"
 #include "fcntl.h"
+#include "sysinfo.h"
 
 // Fetch the nth word-sized system call argument as a file descriptor
 // and return both the descriptor and the corresponding struct file.
@@ -501,5 +504,22 @@ sys_pipe(void)
     fileclose(wf);
     return -1;
   }
+  return 0;
+}
+
+uint64
+sys_sysinfo(void)
+{
+  uint64 addr;
+  struct sysinfo sinfo;
+  struct proc *p = myproc();
+
+  argaddr(0, &addr);
+
+  sinfo.freemem = getfreemem();
+  sinfo.nproc = getnproc();
+
+  if (copyout(p->pagetable, addr, (char *) &sinfo, sizeof(sinfo)) < 0)
+    return -1;
   return 0;
 }
