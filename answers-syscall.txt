@@ -1,0 +1,11 @@
+usertrap() at kernel/trap.c
+
+0x7 ; SYS_exec (exec command)
+
+0x200000022 ; user mode (SPP bit is 0)
+
+lw  a3,0(zero) ; a3
+
+Load page fault ; Not mapped in kernel address
+
+initcode ; 1
